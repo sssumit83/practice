@@ -1,0 +1,370 @@
+xml is user defined tags.
+html has user defined tags.
+tags are anything which are written inside angular bracket
+----------------------------------------------------------------
+tags are two types:
+---------------------
+1. paired tags   <>  </>
+2. unpaired tags  <>
+------------------------------------------
+Block level tags:
+it takes the full browser width.
+
+inline level tags:
+it takes only text width.
+
+<hr> :this tag is used for horizontal line.
+
+alt+shift+s :for format the document.
+
+header,footer,nav,etc are symmentic tags, they dont have any own functionality.
+
+
+<i></i>, <b></b>, <strong></strong>, <em></em>
+
+
+
+subscript: it will down the character eg: H 2O
+
+superscript: it will up the character  eg: (a+b) 2
+
+/ is used to entering into folder.
+. is used to coming out of the folder.
+
+
+List:
+---------
+there are three types of list namely:
+1. ordered list
+2. unordered list
+3. defination list
+
+assigment:- (see list1 in V.S. code)
+
+Q1. what is ol?
+Q2. what is ul?
+Q3. what is dl?
+Q4. what is dt?
+Q5. what is dd?
+
+
+<audio>&<video> tags are also symmentic tags but combination of HTML5.
+
+assigment:-
+---------------
+create a table
+
+
+
+
+
+
+
+
+CSS:-
+-----------
+there are three types of css namely:
+1. inline css
+2. internal css
+3. external css
+
+
+1. inline css:
+--------------------
+highest priority goes to inline css but there are several drawbacks are:
+a) code maintaince
+b) code duplication
+c) readibility(code complexity)
+d) we cant go for selector.
+
+
+2. internal css:
+---------------------
+internal css used inside style tag under head tag.
+
+advantages:
+----------------
+no code duplication only if the elements(tags) are same.
+
+disadvantages:
+-----------------
+some limitations are there:
+code maintaince will reduce because code will become more number of lines.
+
+
+3. external css:
+------------------
+external css is a differnt file having extension .css and we can link one css file with n number html file.
+
+
+
+css selectors:
+-----------------
+tagname/element selectors.
+
+types of selectors in css:
+---------------------------------
+1. ID selector
+2. class selector
+3. universal selector
+4. group selector
+5. descendant selector
+6. psuedo selector
+
+ID selector:
+-----------------
+when we need different styles for same elements(tags).
+
+syntax: "#"<element_name>
+
+note: it must be unique.
+
+
+class selector:
+-------------------
+whenever we need same style for differnt elementss.
+
+syntax:  "."<element_name>
+
+note: it can be duplicated.
+
+
+3. universal selector:
+------------------------------
+for all the tags present inside the <body> it applies same style.
+
+syntax: "*"
+
+
+4. group selector:
+-------------------------------
+we can select by grouping all the elements without using any id and class syntax.
+
+syntax: "," <h1,h2,h3>
+
+
+5. descendant selector:
+---------------------
+syntax: div p{
+
+	}
+
+
+6. psuedo selector:
+---------------------------
+for hover, focus, visited, active, effects
+
+
+
+
+* Box Shadow:
+-----------------
+it will take four attributes as follows:
+syntax box-shadow: (x,y,blur,color);
+eg: box-shadow: 0px 0px 10px red;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://github.com/sssumit83/Student-management.git
+
+
+
+https://github.com/sssumit83/StudentTableProject.git
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+java
+------------
+
+Design patter
+----------------
+proven solution for existing problem.
+there are three types of design pattern:
+1. creational.
+2. behavioral.
+3. structural.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+package com.te.design.dao;
+
+import java.util.List;
+import java.util.Scanner;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+
+import com.te.design.dto.Student;
+import com.technoelevate.design.factory.DaoInterface;
+
+
+
+
+public class StudentDaoImpl implements DaoInterface{
+	Scanner scanner = new Scanner(System.in);
+	@Override
+	public void add() {
+		EntityManagerFactory factory = null;
+		EntityManager entityManager = null;
+		EntityTransaction entityTransaction = null;
+		try {
+			Student student = new Student();
+			student.setId(100);
+			student.setName("nilim sir");
+			student.setCourse("development");
+			factory = Persistence.createEntityManagerFactory("emp");
+			entityManager = factory.createEntityManager();
+			entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.persist(student);
+			entityTransaction.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			entityTransaction.rollback();
+			entityManager.close();
+			factory.close();
+		}
+	}			
+
+
+	@Override
+	public void update() {
+		EntityManagerFactory factory = null;
+		EntityManager entityManager = null;
+		EntityTransaction entityTransaction = null;
+		try {
+			factory = Persistence.createEntityManagerFactory("emp");
+			entityManager = factory.createEntityManager();
+			entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			Student student = entityManager.getReference(Student.class, 100);
+			student.setName("bapuraj");
+			student.setCourse("testing");
+			entityManager.persist(student);
+			entityTransaction.commit();
+		} catch (Exception e) {
+		}finally {
+			entityTransaction.rollback();
+			entityManager.close();
+			factory.close();
+		}
+	}
+
+	@Override
+	public void findById() {
+		EntityManagerFactory factory = null;
+		EntityManager entityManager = null;
+		try {
+			factory = Persistence.createEntityManagerFactory("emp");
+			entityManager = factory.createEntityManager();
+			Student student = entityManager.find(Student.class, 100);
+			System.out.println("=====================================================");
+			System.out.println(student.getId());
+			System.out.println(student.getName());
+			System.out.println(student.getCourse());
+		} catch (Exception e) {
+		}finally {
+			entityManager.close();
+			factory.close();
+		}
+	}
+
+	@Override
+	public void findAll() {
+		EntityManagerFactory factory = null;
+		EntityManager entityManager = null;
+		String findAll = "from Student";
+		try {
+			factory = Persistence.createEntityManagerFactory("emp");
+			entityManager = factory.createEntityManager();
+			Query query = entityManager.createQuery(findAll);
+			List<Student> list = query.getResultList();
+			System.out.println(list);
+			System.out.println("==================================");
+			for (Student student : list) {
+				System.out.println(student);
+			}
+		}finally {
+			entityManager.close();
+			factory.close();
+		}
+	}
+
+	@Override
+	public void delete() {
+		EntityManagerFactory factory = null;
+		EntityManager entityManager = null;
+		EntityTransaction entityTransaction = null;
+		try {
+			factory = Persistence.createEntityManagerFactory("emp");
+			entityManager = factory.createEntityManager();
+			entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			Student student = entityManager.getReference(Student.class, 100);
+			entityManager.remove(student);
+			entityTransaction.commit();
+		} catch (Exception e) {
+		}finally {
+			entityTransaction.rollback();
+			entityManager.close();
+			factory.close();
+		}
+	}
+}
+
